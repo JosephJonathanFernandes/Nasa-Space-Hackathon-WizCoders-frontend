@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Space Theme - Deep Navy Base */
+    --background: 225 60% 10%;
+    --foreground: 210 17% 98%;
+
+    --card: 225 50% 12%;
+    --card-foreground: 210 17% 98%;
+
+    --popover: 225 55% 11%;
+    --popover-foreground: 210 17% 98%;
+
+    /* Cosmic Blue Primary */
+    --primary: 214 100% 62%;
+    --primary-foreground: 210 17% 98%;
+
+    /* Nebula Purple Secondary */
+    --secondary: 244 100% 69%;
+    --secondary-foreground: 210 17% 98%;
+
+    --muted: 225 40% 18%;
+    --muted-foreground: 210 17% 70%;
+
+    /* Accent - Lighter Blue */
+    --accent: 214 100% 72%;
+    --accent-foreground: 225 60% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 17% 98%;
+
+    --border: 225 35% 20%;
+    --input: 225 35% 20%;
+    --ring: 214 100% 62%;
+
+    --radius: 0.75rem;
+
+    /* Custom Space Theme Tokens */
+    --space-glow: 214 100% 62%;
+    --nebula: 244 100% 69%;
+    --star: 210 17% 98%;
+    
+    /* Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(225, 60%, 10%), hsl(225, 50%, 15%), hsl(244, 100%, 20%));
+    --gradient-glow: linear-gradient(135deg, hsl(214, 100%, 62%), hsl(244, 100%, 69%));
+    --gradient-nebula: radial-gradient(ellipse at center, hsl(244, 100%, 69% / 0.3), transparent);
+    
+    /* Shadows */
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.2);
+    --shadow-card: 0 10px 40px hsl(225, 60%, 5% / 0.5);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    /* Use the CSS variable directly for global border color instead of @apply which
+       can fail if Tailwind hasn't generated the utility class yet. */
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Animated Starfield Background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 33% 70%, white, transparent),
+      radial-gradient(1px 1px at 75% 40%, white, transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    animation: twinkle 60s ease-in-out infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  @keyframes twinkle {
+    0%, 100% { 
+      background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 33% 70%, 75% 40%;
+      opacity: 0.3;
+    }
+    50% { 
+      background-position: 100% 100%, 0% 0%, 60% 40%, 70% 20%, 80% 70%, 43% 80%, 85% 30%;
+      opacity: 0.5;
+    }
+  }
+  
+  /* Glassmorphism utility */
+  .glass {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.3);
+  }
+  
+  /* Glow effect utility */
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  /* Pulse animation for exoplanet detections */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.8);
+      transform: scale(1.05);
+    }
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
