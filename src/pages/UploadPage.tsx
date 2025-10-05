@@ -25,6 +25,7 @@ const UploadPage = () => {
       period: number;
       confidence: number;
     }[];
+    file?: File;
   };
 
   const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
@@ -63,6 +64,7 @@ const UploadPage = () => {
             confidence: 0.76,
           },
         ],
+        file: file,
       };
 
       setAnalysisResults(mockResults);
