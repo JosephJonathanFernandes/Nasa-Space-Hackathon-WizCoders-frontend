@@ -16,7 +16,8 @@ export interface Message {
 }
 
 interface ChatInterfaceProps {
-  onSendMessage: (message: string) => Promise<void>;
+  // onSendMessage should return the assistant's reply text (or undefined/null on error)
+  onSendMessage: (message: string) => Promise<string | void>;
   isLoading: boolean;
 }
 
@@ -51,13 +52,15 @@ export const ChatInterface = ({ onSendMessage, isLoading }: ChatInterfaceProps) 
     setMessages((prev) => [...prev, userMessage]);
 
     // Call backend (placeholder - will be connected to FastAPI)
-    await onSendMessage(content);
+    const assistantContent = await onSendMessage(content);
 
-    // Add assistant response (mock for now)
     const assistantMessage: Message = {
       id: (Date.now() + 1).toString(),
       role: "assistant",
-      content: "This is a placeholder response. The actual AI assistant will be connected to the FastAPI backend with RAG capabilities to provide intelligent answers about your exoplanet data.",
+      content:
+        assistantContent && assistantContent.length > 0
+          ? assistantContent
+          : "This is a placeholder response. The actual AI assistant will be connected to the FastAPI backend with RAG capabilities to provide intelligent answers about your exoplanet data.",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, assistantMessage]);

@@ -1,5 +1,8 @@
 import { Message } from "./ChatInterface";
 import { User, Bot, Loader2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
 
 /**
  * Individual message bubble component
@@ -47,7 +50,18 @@ export const MessageBubble = ({ message, isLoading }: MessageBubbleProps) => {
           }
         `}
       >
-        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        {isUser ? (
+          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        ) : (
+          <div className="prose prose-sm max-w-full">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeSanitize]}
+            >
+              {message.content}
+            </ReactMarkdown>
+          </div>
+        )}
         <p className="text-xs text-muted-foreground mt-2">
           {message.timestamp.toLocaleTimeString()}
         </p>
