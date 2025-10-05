@@ -9,7 +9,7 @@
 🌐 **[🚀 Visit Live Website → ExoVisionAI.space](https://your-deployed-site-url.com)**  
 
 <p align="center">
-  <img src="assets/home.png" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+  <img src="src/assets/home.jpg" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
 </p>
 
 ---
