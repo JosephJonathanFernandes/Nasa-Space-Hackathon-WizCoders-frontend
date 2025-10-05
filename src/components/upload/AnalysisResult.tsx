@@ -34,9 +34,27 @@ interface AnalysisResultProps {
 }
 
 export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
+  const csvColumnNames = [
+    "orbital_period",
+    "transit_duration",
+    "transit_depth",
+    "planet_radius",
+    "equilibrium_temperature",
+    "insolation_flux",
+    "stellar_effective_temperature",
+    "stellar_surface_gravity",
+    "stellar_radius",
+    "ra",
+    "dec"
+  ];
+  // Helper to check if file is FITS
+  const isFitsFile = results.file && results.file.name.toLowerCase().endsWith('.fits');
   const [predictions, setPredictions] = useState<Array<{ id: number; transit_depth: number; orbital_period: number; label: string }>>([]);
   const [loadingPred, setLoadingPred] = useState(false);
   const [errorPred, setErrorPred] = useState<string | null>(null);
+  const [fitsImageUrl, setFitsImageUrl] = useState<string | null>(null);
+  const [loadingFits, setLoadingFits] = useState(false);
+  const [errorFits, setErrorFits] = useState<string | null>(null);
 
   useEffect(() => {
     if (results.file) {
@@ -55,6 +73,28 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
           setErrorPred(e.message || "Prediction failed");
         })
         .finally(() => setLoadingPred(false));
+
+      // Fetch FITS image from backend
+      setLoadingFits(true);
+      setFitsImageUrl(null);
+      setErrorFits(null);
+      const formData = new FormData();
+      formData.append("file", results.file);
+      fetch("http://localhost:8000/upload_fits", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to get FITS image");
+          return response.blob();
+        })
+        .then((blob) => {
+          setFitsImageUrl(URL.createObjectURL(blob));
+        })
+        .catch((e) => {
+          setErrorFits(e.message || "Could not load FITS image");
+        })
+        .finally(() => setLoadingFits(false));
     }
   }, [results.file]);
 
@@ -82,7 +122,7 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
             </div>
             <div className="p-4 rounded-lg bg-secondary/10 border border-secondary/20">
               <p className="text-sm text-muted-foreground mb-1">Columns</p>
-              <p className="text-2xl font-bold text-secondary">{results.summary.columns.length}</p>
+              <p className="text-2xl font-bold text-secondary">{!isFitsFile ? 11 : results.summary.columns.length}</p>
             </div>
             <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
               <p className="text-sm text-muted-foreground mb-1">Missing Values</p>
@@ -93,7 +133,7 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
           <div>
             <p className="text-sm font-semibold mb-2">Column Names:</p>
             <div className="flex flex-wrap gap-2">
-              {results.summary.columns.map((col, idx) => (
+              {(!isFitsFile ? csvColumnNames : results.summary.columns).map((col, idx) => (
                 <Badge key={idx} variant="outline" className="bg-card/50">
                   {col}
                 </Badge>
@@ -103,16 +143,60 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
         </CardContent>
       </Card>
 
-      {/* Light Curve Chart */}
+      {/* Light Curve Chart (CSV only) */}
+      {!isFitsFile && (
+        <Card className="glass border-border/30">
+          <CardHeader>
+            <CardTitle>Light Curve Visualization</CardTitle>
+            <CardDescription>Stellar brightness variations over time</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LightCurveChart data={results.lightCurve} />
+          </CardContent>
+        </Card>
+      )}
+
+      {/* FITS Image from backend */}
       <Card className="glass border-border/30">
         <CardHeader>
-          <CardTitle>Light Curve Visualization</CardTitle>
-          <CardDescription>Stellar brightness variations over time</CardDescription>
+          <CardTitle>FITS File Plot - (Light Curve Visualization)</CardTitle>
+          <CardDescription>Generated PNG from uploaded FITS file</CardDescription>
         </CardHeader>
         <CardContent>
-          <LightCurveChart data={results.lightCurve} />
+          {loadingFits ? (
+            <div className="text-center py-6 text-muted-foreground">Loading FITS image...</div>
+          ) : errorFits ? (
+            <div className="text-center py-6 text-destructive">{errorFits}</div>
+          ) : fitsImageUrl ? (
+            <div className="flex justify-center items-center py-4">
+              <img src={fitsImageUrl} alt="FITS Plot" style={{ maxWidth: "100%", borderRadius: "0.75rem", boxShadow: "0 2px 16px #0002" }} />
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">No FITS image available.</div>
+          )}
         </CardContent>
       </Card>
+
+      {/* FITS Image from backend */}
+      {/* <Card className="glass border-border/30">
+        <CardHeader>
+          <CardTitle>FITS File Plot</CardTitle>
+          <CardDescription>Generated PNG from uploaded FITS file</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loadingFits ? (
+            <div className="text-center py-6 text-muted-foreground">Loading FITS image...</div>
+          ) : errorFits ? (
+            <div className="text-center py-6 text-destructive">{errorFits}</div>
+          ) : fitsImageUrl ? (
+            <div className="flex justify-center items-center py-4">
+              <img src={fitsImageUrl} alt="FITS Plot" style={{ maxWidth: "100%", borderRadius: "0.75rem", boxShadow: "0 2px 16px #0002" }} />
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">No FITS image available.</div>
+          )}
+        </CardContent>
+      </Card> */}
 
       {/* Exoplanet Candidates */}
       {/* <Card className="glass border-border/30">

@@ -27,7 +27,7 @@ export const Navbar = () => {
               <Rocket className="h-6 w-6 text-primary" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              ExoVision AI
+              ExoScope
             </span>
           </Link>
 

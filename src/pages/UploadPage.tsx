@@ -95,8 +95,23 @@ const UploadPage = () => {
     }
     setIsUploading(true);
     try {
+      // Optionally call uploadFits if you want to upload before analysis
       await uploadFits(fitsFile);
       toast({ title: "Upload complete", description: `${fitsFile.name} uploaded`, variant: "default" });
+      // Immediately show analysis result page with the FITS file
+      setAnalysisResults({
+        summary: {
+          totalRows: 0,
+          columns: [],
+          missingValues: 0,
+        },
+        lightCurve: {
+          time: [],
+          flux: [],
+        },
+        candidates: [],
+        file: fitsFile,
+      });
       setFitsFile(null);
     } catch (err) {
       toast({ title: "Upload failed", description: String(err), variant: "destructive" });
