@@ -69,21 +69,6 @@ src/
 └── App.tsx                    # Main app with routing
 ```
 
-## 🎨 Design System
-
-### Color Palette
-- **Deep Navy**: `hsl(225, 60%, 10%)` - Background
-- **Cosmic Blue**: `hsl(214, 100%, 62%)` - Primary actions
-- **Nebula Purple**: `hsl(244, 100%, 69%)` - Secondary elements
-- **Star White**: `hsl(210, 17%, 98%)` - Text
-
-### Features
-- Glassmorphic cards with backdrop blur
-- Animated starfield background
-- Glowing effects on interactive elements
-- Smooth transitions with Framer Motion patterns
-- Responsive mobile-first design
-
 ## 🚦 Getting Started
 
 ### Prerequisites
