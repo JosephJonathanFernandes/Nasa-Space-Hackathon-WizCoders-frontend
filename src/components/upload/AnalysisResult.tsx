@@ -3,7 +3,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { LightCurveChart } from "./LightCurveChart";
+import { predictExoplanets } from "@/services/api";
 
 /**
  * Analysis results display component
@@ -26,11 +28,36 @@ interface AnalysisResultProps {
       period: number;
       confidence: number;
     }[];
+    file?: File; // The uploaded CSV file for prediction
   };
   onBack: () => void;
 }
 
 export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
+  const [predictions, setPredictions] = useState<{ id: number; label: string }[]>([]);
+  const [loadingPred, setLoadingPred] = useState(false);
+  const [errorPred, setErrorPred] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (results.file) {
+      setLoadingPred(true);
+      predictExoplanets(results.file)
+        .then((data) => {
+          // Ensure predictions are in correct format
+          if (Array.isArray(data.predictions)) {
+            setPredictions(data.predictions);
+          } else {
+            setPredictions([]);
+          }
+          setErrorPred(null);
+        })
+        .catch((e) => {
+          setErrorPred(e.message || "Prediction failed");
+        })
+        .finally(() => setLoadingPred(false));
+    }
+  }, [results.file]);
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
@@ -149,6 +176,57 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
               <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">No exoplanet candidates detected in this dataset</p>
             </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Prediction Results from /predict */}
+      <Card className="glass border-border/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-primary" />
+            ML Prediction Results
+          </CardTitle>
+          <CardDescription>
+            Model-predicted exoplanet status for each row
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loadingPred ? (
+            <div className="text-center py-6 text-muted-foreground">Loading predictions...</div>
+          ) : errorPred ? (
+            <div className="text-center py-6 text-destructive">{errorPred}</div>
+          ) : predictions.length > 0 ? (
+            <div className="rounded-lg border border-border/50 overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Status Label</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {predictions.map((pred) => (
+                    <TableRow key={pred.id}>
+                      <TableCell className="font-mono">{pred.id}</TableCell>
+                      <TableCell>
+                        <Badge className={
+                          pred.label === "CONFIRMED"
+                            ? "bg-secondary/20 text-secondary border-secondary/50 pulse-glow"
+                            : pred.label === "CANDIDATE"
+                              ? "bg-primary/20 text-primary border-primary/50"
+                              : "bg-destructive/20 text-destructive border-destructive/50"
+                        }>
+                          {pred.label}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">No predictions available.</div>
           )}
         </CardContent>
       </Card>

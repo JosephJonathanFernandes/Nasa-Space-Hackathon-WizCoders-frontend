@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChatInterface } from "@/components/chat/ChatInterface";
+import { postChat } from "@/services/api";
 
 /**
  * Chat page with AI research assistant
@@ -12,31 +13,9 @@ const ChatPage = () => {
     setIsLoading(true);
 
     try {
-      // Adjust backend base URL as needed. If running locally with uvicorn: http://127.0.0.1:8000
-      const base = "http://127.0.0.1:8000";
-      const res = await fetch(`${base}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: message, top_k: 5, stream: false }),
-      });
-
-      if (!res.ok) {
-        // Try to parse error details
-        let errText = `${res.status} ${res.statusText}`;
-        try {
-          const j = await res.json();
-          if (j.detail) errText = j.detail;
-        } catch (e) {
-          /* ignore json parse errors */
-        }
-        throw new Error(errText);
-      }
-
-      const data = await res.json();
-      // backend returns { answer: string, sources: [...], docs: [...] }
-      return data.answer as string;
+      const data = await postChat({ question: message, top_k: 5, stream: false });
+      return (data && (data.answer || data.response || data.text)) as string;
     } catch (e: unknown) {
-      // Return an error message that will be displayed as assistant reply
       const message = e instanceof Error ? e.message : String(e);
       return `Error: ${message}`;
     } finally {
