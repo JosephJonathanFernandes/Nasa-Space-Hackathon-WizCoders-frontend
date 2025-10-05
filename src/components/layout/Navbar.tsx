@@ -38,7 +38,7 @@ export const Navbar = () => {
             <Link to="/upload" className={navLinkClass("/upload")}>
               <span className="flex items-center gap-2">
                 <Upload className="h-4 w-4" />
-                Upload Data
+                Find Exoplanets
               </span>
             </Link>
             <Link to="/chat" className={navLinkClass("/chat")}>

@@ -38,8 +38,7 @@ export const Hero = () => {
             <div className="flex flex-wrap gap-4">
               <Link to="/upload">
                 <Button size="lg" className="gap-2 glow">
-                  <Upload className="h-5 w-5" />
-                  Upload Dataset
+                  Find Exoplanets
                 </Button>
               </Link>
               <Link to="/chat">
