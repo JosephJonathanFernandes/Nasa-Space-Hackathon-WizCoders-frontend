@@ -2,7 +2,21 @@
 
 🌌 **NASA Space Apps Global Hackathon Project**
 
-An AI-powered platform for automatic detection of exoplanets using data from NASA's Kepler and TESS missions.
+> 🔭 Explore the cosmos with AI — detect exoplanets straight from your browser!
+
+---
+
+🌐 **[🚀 Visit Live Website → ExoVisionAI.space](https://your-deployed-site-url.com)**  
+
+<p align="center">
+  <img src="src/assets/home.jpg" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+</p>
+<p align="center">
+  <img src="home2.jpg" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+</p>
+
+
+---
 
 ## 🚀 Project Overview
 
@@ -22,9 +36,10 @@ ExoVision AI leverages machine learning to identify candidate exoplanets based o
 - **Recharts** - Light curve visualization
 - **React Router** - Navigation
 
-### Backend (Integration Ready)
-- **FastAPI** - High-performance Python backend
-- API endpoints for dataset analysis and chat
+
+### Backend
+💫 The FastAPI backend is available here:  
+👉 **[ExoVision AI Backend Repository](https://github.com/JosephJonathanFernandes/Nasa-Space-Hackathon-WizCoders-backend)**
 
 ## 📁 Project Structure
 
@@ -58,21 +73,6 @@ src/
 └── App.tsx                    # Main app with routing
 ```
 
-## 🎨 Design System
-
-### Color Palette
-- **Deep Navy**: `hsl(225, 60%, 10%)` - Background
-- **Cosmic Blue**: `hsl(214, 100%, 62%)` - Primary actions
-- **Nebula Purple**: `hsl(244, 100%, 69%)` - Secondary elements
-- **Star White**: `hsl(210, 17%, 98%)` - Text
-
-### Features
-- Glassmorphic cards with backdrop blur
-- Animated starfield background
-- Glowing effects on interactive elements
-- Smooth transitions with Framer Motion patterns
-- Responsive mobile-first design
-
 ## 🚦 Getting Started
 
 ### Prerequisites
@@ -93,39 +93,6 @@ npm run dev
 ```
 
 Visit `http://localhost:8080` to see the application.
-
-## 🔌 Backend Integration
-
-The frontend is ready to connect to a FastAPI backend with these endpoints:
-
-### `/analyze` (POST)
-Upload CSV file for exoplanet detection
-```typescript
-Request: FormData with 'file' field
-Response: {
-  summary: { totalRows, columns, missingValues },
-  lightCurve: { time[], flux[] },
-  candidates: [{ id, transitDepth, period, confidence }]
-}
-```
-
-### `/chat` (POST)
-Send message to AI research assistant
-```typescript
-Request: { messages: [{ role, content }] }
-Response: { message: string }
-```
-
-Update `VITE_API_URL` in environment variables to connect to your backend.
-
-## 📊 Data Format
-
-Expected CSV columns for light curve data:
-- `time` - Observation time (days)
-- `flux` - Normalized stellar brightness
-- `flux_err` - Flux measurement error
-- `quality` - Data quality flags
-- `cadence` - Observation cadence
 
 ## 🧠 AI Model Integration
 
@@ -154,8 +121,6 @@ The platform is designed to work with ML models trained on:
 ✅ Space-themed animations  
 
 ### Coming Soon
-- [ ] FastAPI backend connection
-- [ ] Real ML model integration
 - [ ] Advanced filtering and sorting
 - [ ] Export analysis reports
 - [ ] User authentication
