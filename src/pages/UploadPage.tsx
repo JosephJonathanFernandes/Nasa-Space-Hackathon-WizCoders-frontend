@@ -9,7 +9,25 @@ import { useToast } from "@/hooks/use-toast";
  */
 const UploadPage = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState<any>(null);
+  type AnalysisResults = {
+    summary: {
+      totalRows: number;
+      columns: string[];
+      missingValues: number;
+    };
+    lightCurve: {
+      time: number[];
+      flux: number[];
+    };
+    candidates: {
+      id: string;
+      transitDepth: number;
+      period: number;
+      confidence: number;
+    }[];
+  };
+
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
   const { toast } = useToast();
 
   const handleUpload = async (file: File) => {

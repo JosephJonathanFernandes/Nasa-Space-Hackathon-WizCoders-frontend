@@ -11,11 +11,37 @@ const ChatPage = () => {
   const handleSendMessage = async (message: string) => {
     setIsLoading(true);
 
-    // Simulate API call to backend /chat endpoint
-    // Replace with actual fetch to FastAPI backend
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Adjust backend base URL as needed. If running locally with uvicorn: http://127.0.0.1:8000
+      const base = "http://127.0.0.1:8000";
+      const res = await fetch(`${base}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: message, top_k: 5, stream: false }),
+      });
 
-    setIsLoading(false);
+      if (!res.ok) {
+        // Try to parse error details
+        let errText = `${res.status} ${res.statusText}`;
+        try {
+          const j = await res.json();
+          if (j.detail) errText = j.detail;
+        } catch (e) {
+          /* ignore json parse errors */
+        }
+        throw new Error(errText);
+      }
+
+      const data = await res.json();
+      // backend returns { answer: string, sources: [...], docs: [...] }
+      return data.answer as string;
+    } catch (e: unknown) {
+      // Return an error message that will be displayed as assistant reply
+      const message = e instanceof Error ? e.message : String(e);
+      return `Error: ${message}`;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
