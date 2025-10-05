@@ -26,7 +26,7 @@ export const ChatInterface = ({ onSendMessage, isLoading }: ChatInterfaceProps) 
     {
       id: "welcome",
       role: "assistant",
-      content: "Hello! I'm your ExoVision AI research assistant. I can help you understand exoplanet detection, light curve analysis, and interpret your dataset results. What would you like to know?",
+  content: "Hello! I'm your ExoScope research assistant. I can help you understand exoplanet detection, light curve analysis, and interpret your dataset results. What would you like to know?",
       timestamp: new Date(),
     },
   ]);

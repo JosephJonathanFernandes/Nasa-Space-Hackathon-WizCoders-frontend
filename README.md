@@ -1,4 +1,4 @@
-# ExoVision AI - A World Away: Hunting for Exoplanets with AI
+# ExoScope - A World Away: Hunting for Exoplanets with AI
 
 🌌 **NASA Space Apps Global Hackathon Project**
 
@@ -6,7 +6,7 @@ An AI-powered platform for automatic detection of exoplanets using data from NAS
 
 ## 🚀 Project Overview
 
-ExoVision AI leverages machine learning to identify candidate exoplanets based on light curve data. The platform includes:
+ExoScope leverages machine learning to identify candidate exoplanets based on light curve data. The platform includes:
 
 - **Dataset Upload & Analysis**: Upload CSV files and visualize stellar brightness variations
 - **AI Detection Model**: Trained ML model identifies exoplanet candidates automatically
@@ -181,7 +181,6 @@ MIT License - See LICENSE file for details
 - [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/)
 - [Kepler Mission](https://www.nasa.gov/kepler)
 - [TESS Mission](https://tess.mit.edu/)
-- [Lovable Documentation](https://docs.lovable.dev/)
 
 ---
 
