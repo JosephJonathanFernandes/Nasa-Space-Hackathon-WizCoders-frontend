@@ -11,6 +11,10 @@
 <p align="center">
   <img src="src/assets/home.jpg" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
 </p>
+<p align="center">
+  <img src="home2.jpg" alt="ExoVision AI Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+</p>
+
 
 ---
 
