@@ -1,107 +1,118 @@
-import { useState } from "react";
-import { UploadSection } from "@/components/upload/UploadSection";
-import { AnalysisResult } from "@/components/upload/AnalysisResult";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { uploadFits, uploadZip } from "@/services/apiClient";
 
 /**
- * Upload page for CSV dataset analysis
- * Handles file upload and displays analysis results
+ * UploadPage
+ * - Upload single FITS to /upload_fits
+ * - Upload ZIP to /upload_zip (navigates to /lightcurve-list with returned ids)
  */
-const UploadPage = () => {
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  type AnalysisResults = {
-    summary: {
-      totalRows: number;
-      columns: string[];
-      missingValues: number;
-    };
-    lightCurve: {
-      time: number[];
-      flux: number[];
-    };
-    candidates: {
-      id: string;
-      transitDepth: number;
-      period: number;
-      confidence: number;
-    }[];
-  };
-
-  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
+const UploadPage: React.FC = () => {
+  const [fitsFile, setFitsFile] = useState<File | null>(null);
+  const [zipFile, setZipFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleUpload = async (file: File) => {
-    setIsAnalyzing(true);
-
-    // Simulate API call to backend /analyze endpoint
-    // Replace with actual fetch to FastAPI backend
-    setTimeout(() => {
-      // Mock results
-      const mockResults = {
-        summary: {
-          totalRows: 4500,
-          columns: ["time", "flux", "flux_err", "quality", "cadence"],
-          missingValues: 23,
-        },
-        lightCurve: {
-          time: Array.from({ length: 100 }, (_, i) => i * 0.5),
-          flux: Array.from({ length: 100 }, (_, i) => 
-            1.0 + Math.sin(i * 0.3) * 0.02 + (Math.random() - 0.5) * 0.01
-          ),
-        },
-        candidates: [
-          {
-            id: "KIC-12345678",
-            transitDepth: 0.245,
-            period: 3.52,
-            confidence: 0.89,
-          },
-          {
-            id: "KIC-87654321",
-            transitDepth: 0.156,
-            period: 7.21,
-            confidence: 0.76,
-          },
-        ],
-      };
-
-      setAnalysisResults(mockResults);
-      setIsAnalyzing(false);
-      toast({
-        title: "Analysis complete",
-        description: `Found ${mockResults.candidates.length} exoplanet candidates`,
-      });
-    }, 2500);
+  const onSubmitFits = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!fitsFile) {
+      toast({ title: "No file selected", description: "Please choose a FITS file to upload.", variant: "destructive" });
+      return;
+    }
+    setIsUploading(true);
+    try {
+      await uploadFits(fitsFile);
+      toast({ title: "Upload complete", description: `${fitsFile.name} uploaded`, variant: "default" });
+    } catch (err) {
+      toast({ title: "Upload failed", description: String(err), variant: "destructive" });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const handleBack = () => {
-    setAnalysisResults(null);
+  const onSubmitZip = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!zipFile) {
+      toast({ title: "No file selected", description: "Please choose a ZIP file to upload.", variant: "destructive" });
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const data = await uploadZip(zipFile);
+      // Normalize returned ids: either array or { ids: [...] }
+      const ids: string[] = Array.isArray(data) ? data : Array.isArray(data.ids) ? data.ids : [];
+      if (!ids.length) {
+        toast({ title: "No IDs returned", description: "Backend did not return any Kepler/TESS IDs.", variant: "destructive" });
+      } else {
+        toast({ title: "Upload complete", description: `Received ${ids.length} IDs. Opening list...` });
+        navigate("/lightcurve-list", { state: { ids } });
+      }
+    } catch (err) {
+      toast({ title: "Upload failed", description: String(err), variant: "destructive" });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
     <div className="min-h-screen pt-24 pb-12 relative">
       <div className="container mx-auto px-4">
-        {!analysisResults ? (
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="text-center space-y-2 mb-8 animate-fade-in">
-              <h1 className="text-4xl font-bold">Upload Dataset</h1>
-              <p className="text-xl text-muted-foreground">
-                Upload your Kepler or TESS light curve CSV file for AI-powered exoplanet detection
-              </p>
-            </div>
-            <UploadSection onUpload={handleUpload} />
-            {isAnalyzing && (
-              <div className="text-center">
-                <div className="inline-flex items-center gap-3 glass px-6 py-3 rounded-full">
-                  <div className="h-4 w-4 rounded-full bg-primary animate-pulse-glow" />
-                  <span className="text-sm font-medium">Analyzing light curve data...</span>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="glass border-border/30">
+            <CardHeader>
+              <CardTitle>Upload Single FITS</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={onSubmitFits} className="space-y-4">
+                <input
+                  type="file"
+                  accept=".fits"
+                  onChange={(e) => setFitsFile(e.target.files?.[0] ?? null)}
+                  className="block w-full text-sm text-muted-foreground"
+                />
+                <div className="flex gap-2">
+                  <Button variant="secondary" type="submit" onClick={onSubmitFits} disabled={isUploading}>
+                    {isUploading ? "Uploading..." : "Choose FITS File & Upload"}
+                  </Button>
+                  <Button variant="ghost" onClick={() => setFitsFile(null)}>
+                    Clear
+                  </Button>
                 </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <AnalysisResult results={analysisResults} onBack={handleBack} />
-        )}
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card className="glass border-border/30">
+            <CardHeader>
+              <CardTitle>Upload ZIP (multiple FITS)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={onSubmitZip} className="space-y-4">
+                <input
+                  type="file"
+                  accept=".zip"
+                  onChange={(e) => setZipFile(e.target.files?.[0] ?? null)}
+                  className="block w-full text-sm text-muted-foreground"
+                />
+                <div className="flex gap-2">
+                  <Button variant="secondary" type="submit" onClick={onSubmitZip} disabled={isUploading}>
+                    {isUploading ? "Uploading..." : "Choose ZIP & Upload"}
+                  </Button>
+                  <Button variant="ghost" onClick={() => setZipFile(null)}>
+                    Clear
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Upload a ZIP containing multiple FITS files. Backend will return a list of Kepler/TESS IDs.
+                </p>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
