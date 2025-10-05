@@ -34,7 +34,7 @@ interface AnalysisResultProps {
 }
 
 export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
-  const [predictions, setPredictions] = useState<{ id: number; label: string }[]>([]);
+  const [predictions, setPredictions] = useState<Array<{ id: number; transit_depth: number; orbital_period: number; label: string }>>([]);
   const [loadingPred, setLoadingPred] = useState(false);
   const [errorPred, setErrorPred] = useState<string | null>(null);
 
@@ -115,7 +115,7 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
       </Card>
 
       {/* Exoplanet Candidates */}
-      <Card className="glass border-border/30">
+      {/* <Card className="glass border-border/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-secondary" />
@@ -178,7 +178,7 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
             </div>
           )}
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Prediction Results from /predict */}
       <Card className="glass border-border/30">
@@ -202,6 +202,8 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>ID</TableHead>
+                    <TableHead>Transit Depth</TableHead>
+                    <TableHead>Orbital Period</TableHead>
                     <TableHead>Status Label</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -209,10 +211,12 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
                   {predictions.map((pred) => (
                     <TableRow key={pred.id}>
                       <TableCell className="font-mono">{pred.id}</TableCell>
+                      <TableCell>{pred.transit_depth.toFixed(3)}</TableCell>
+                      <TableCell>{pred.orbital_period.toFixed(3)}</TableCell>
                       <TableCell>
                         <Badge className={
                           pred.label === "CONFIRMED"
-                            ? "bg-secondary/20 text-secondary border-secondary/50 pulse-glow"
+                            ? "bg-yellow-200 text-yellow-900 border-yellow-400 shadow-yellow-400/50 pulse-glow"
                             : pred.label === "CANDIDATE"
                               ? "bg-primary/20 text-primary border-primary/50"
                               : "bg-destructive/20 text-destructive border-destructive/50"
