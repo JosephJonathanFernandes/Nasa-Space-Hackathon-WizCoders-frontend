@@ -3,8 +3,11 @@
  * Centralized endpoint configuration for FastAPI integration
  */
 
-// Backend base URL - Update this when FastAPI backend is deployed
-const API_BASE_URL = "http://localhost:8000" || process.env.VITE_API_URL ;
+// Backend base URL - prefers Vite env, defaults to deployed backend
+export const API_BASE_URL = (
+  import.meta.env?.VITE_API_URL ||
+  "https://giz17-space.hf.space"
+).replace(/\/+$/, "");
 
 /**
  * Upload and analyze CSV dataset

@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LightCurveChart } from "./LightCurveChart";
-import { predictExoplanets } from "@/services/api";
+import { predictExoplanets, API_BASE_URL } from "@/services/api";
 
 /**
  * Analysis results display component
@@ -80,7 +80,7 @@ export const AnalysisResult = ({ results, onBack }: AnalysisResultProps) => {
       setErrorFits(null);
       const formData = new FormData();
       formData.append("file", results.file);
-      fetch("http://localhost:8000/upload_fits", {
+      fetch(`${API_BASE_URL}/upload_fits`, {
         method: "POST",
         body: formData,
       })
