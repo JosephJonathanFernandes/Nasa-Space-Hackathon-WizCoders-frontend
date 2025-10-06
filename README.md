@@ -6,7 +6,7 @@
 
 ---
 
-🌐 **[🚀 Visit Live Website → Exoscope.space](https://your-deployed-site-url.com)**  
+
 
 <p align="center">
    <img src="src/assets/home.jpg" alt="Exoscope Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
