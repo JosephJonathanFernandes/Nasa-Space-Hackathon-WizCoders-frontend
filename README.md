@@ -12,7 +12,10 @@
    <img src="src/assets/home.jpg" alt="Exoscope Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
 </p>
 <p align="center">
-   <img src="home2.jpg" alt="Exoscope Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+   <img src="src/assets/analysis.png" alt="Exoscope Analysis Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
+</p>
+<p align="center">
+   <img src="src/assets/RAG.png" alt="Exoscope RAG Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
 </p>
 
 
