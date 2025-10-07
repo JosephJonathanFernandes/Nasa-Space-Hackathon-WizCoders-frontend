@@ -44,6 +44,13 @@ Exoscope leverages machine learning to identify candidate exoplanets based on li
 💫 The FastAPI backend is available here:  
 👉 **[Exoscope Backend Repository](https://github.com/JosephJonathanFernandes/Nasa-Space-Hackathon-WizCoders-backend)**
 
+### Deployments
+The project has been deployed to the following endpoints (for convenience both the Hugging Face Space used for model hosting and the Vercel deployment for the full app are listed):
+
+- Hugging Face Space (model/backend demo): https://giz17-space.hf.space
+- Vercel (full frontend + backend proxy): https://nasaexoscope.vercel.app/
+
+
 ## 📁 Project Structure
 
 ```
