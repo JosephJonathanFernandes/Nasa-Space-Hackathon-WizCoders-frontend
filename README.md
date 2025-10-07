@@ -92,8 +92,8 @@ src/
 
 ```bash
 # Clone the repository
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
+git clone https://github.com/JosephJonathanFernandes/Nasa-Space-Hackathon-WizCoders-frontend
+cd Nasa-Space-Hackathon-WizCoders-frontend
 
 # Install dependencies
 npm install
@@ -160,8 +160,8 @@ Local development
 
 1. Clone the frontend repository (or navigate into this folder if already cloned).
 
-   git clone <YOUR_FRONTEND_REPO_URL>
-   cd <your-frontend-directory>
+   git clone https://github.com/JosephJonathanFernandes/Nasa-Space-Hackathon-WizCoders-frontend
+   cd Nasa-Space-Hackathon-WizCoders-frontend
 
 2. Install dependencies
 
