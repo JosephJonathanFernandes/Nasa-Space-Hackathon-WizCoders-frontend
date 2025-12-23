@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment and config
+.env
+.env.*
+config/*
+
+# Security
+*.pem
+*.key
+*.crt
+*.pfx
+*.env.local
+!/.env.example

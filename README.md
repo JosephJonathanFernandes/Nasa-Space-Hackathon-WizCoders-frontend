@@ -1,43 +1,81 @@
-# Exoscope - A World Away: Hunting for Exoplanets with AI
 
-🌌 **NASA Space Apps Global Hackathon Project**
+# Professional Frontend for NASA Hackathon
 
-> 🔭 Explore the cosmos with AI — detect exoplanets straight from your browser!
+## Problem Statement
+Enable researchers and enthusiasts to upload, analyze, and visualize astronomical data, and interact with AI-powered tools for exoplanet discovery.
+
+## Architecture
+- **src/**: Core logic, React components, hooks, services, types
+- **config/**: Environment and configuration files (never commit secrets)
+- **tests/**: Unit and integration tests
+- **docs/**: Architecture, design, and contribution docs
+- **scripts/**: Automation and developer utilities
+
+## Technology Stack
+- React 18, Vite, TypeScript
+- Tailwind CSS, shadcn/ui, Recharts
+- React Router, React Query
+
+## Setup & Usage
+1. Clone the repository
+2. Copy `.env.example` to `.env` and fill in values
+3. Run `npm install`
+4. Start with `npm run dev`
+
+## Value
+- Modular, scalable, and secure codebase
+- Recruiter- and reviewer-friendly structure
+- Easy to extend and maintain
+
+## Security & Quality
+- No hardcoded secrets; use environment variables
+- Linting: ESLint, Prettier
+- Testing: Vitest, React Testing Library
+- Pre-commit: Husky, lint-staged
+- CI: GitHub Actions (see below)
+
+## Documentation
+- See `docs/ARCHITECTURE.md` for design
+- See `CONTRIBUTING.md` for contribution guidelines
+- See `CHANGELOG.md` for release notes
+- See `SECURITY.md` for security policy
 
 ---
 
-
-
-<p align="center">
-   <img src="src/assets/home.jpg" alt="Exoscope Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
-</p>
-<p align="center">
-   <img src="src/assets/analysis.png" alt="Exoscope Analysis Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
-</p>
-<p align="center">
-   <img src="src/assets/RAG.png" alt="Exoscope RAG Screenshot" width="800" style="border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.3);" />
-</p>
-
+# GitHub Actions CI Example
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test -- --coverage
+      - run: npm run build
+```
 
 ---
 
-## 🚀 Project Overview
+# Linting, Formatting, and Pre-commit
+- **ESLint**: `npm run lint`
+- **Prettier**: `npm run format`
+- **Husky**: Pre-commit hooks for lint/test
 
-Exoscope leverages machine learning to identify candidate exoplanets based on light curve data. The platform includes:
+# Testing
+- **Vitest**: Fast unit/integration tests
+- **React Testing Library**: UI tests
+- Coverage goal: 80%+
 
-- **Dataset Upload & Analysis**: Upload CSV files and visualize stellar brightness variations
-- **AI Detection Model**: Trained ML model identifies exoplanet candidates automatically
-- **Research Assistant**: RAG-powered chatbot helps researchers understand and explore data
+---
 
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 18** + **Vite** - Fast, modern development
-- **TypeScript** - Type-safe code
-- **Tailwind CSS** - Space-themed UI design
-- **shadcn/ui** - Beautiful component library
-- **Recharts** - Light curve visualization
-- **React Router** - Navigation
+# License
+MIT
 
 
 ### Backend
